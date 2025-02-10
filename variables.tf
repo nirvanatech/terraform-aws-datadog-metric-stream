@@ -16,8 +16,22 @@ variable "datadog_firehose_endpoint" {
   }
 }
 
-variable "datadog_metric_stream_namespace_list" {
-  type    = list(string)
+variable "datadog_metric_stream_filters" {
+  type = list(object({
+    namespace    = string
+    metric_names = optional(list(string))
+  }))
+  default = []
+}
+
+variable "datadog_metric_statistics_configurations" {
+  type = list(object({
+    additional_statistics = list(string)
+    include_metric = optional(list(object({
+      namespace   = string
+      metric_name = string
+    })))
+  }))
   default = []
 }
 

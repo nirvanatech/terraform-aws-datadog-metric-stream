@@ -19,11 +19,30 @@ resource "aws_cloudwatch_metric_stream" "datadog" {
   role_arn      = aws_iam_role.datadog_metric_stream.arn
 
   dynamic "include_filter" {
-    for_each = var.datadog_metric_stream_namespace_list
+    for_each = var.datadog_metric_stream_filters
     iterator = item
 
     content {
-      namespace = item.value
+      namespace    = item.namespace
+      metric_names = item.metric_names
+    }
+  }
+
+  dynamic "statistics_configuration" {
+    for_each = var.datadog_metric_statistics_configurations
+    iterator = item
+
+    content {
+      additional_statistics = item.additional_statistics
+      dynamic "include_metric" {
+        for_each = item.include_metric
+        iterator = inner_item
+
+        content {
+          metric_name = inner_item.metric_name
+          namespace   = inner_item.namespace
+        }
+      }
     }
   }
 }
