@@ -22,8 +22,8 @@ resource "aws_cloudwatch_metric_stream" "datadog" {
     iterator = item
 
     content {
-      namespace    = item.namespace
-      metric_names = item.metric_names
+      namespace    = item.value.namespace
+      metric_names = item.value.metric_names
     }
   }
 
@@ -32,14 +32,14 @@ resource "aws_cloudwatch_metric_stream" "datadog" {
     iterator = item
 
     content {
-      additional_statistics = item.additional_statistics
+      additional_statistics = item.value.additional_statistics
       dynamic "include_metric" {
-        for_each = item.include_metric
+        for_each = item.value.include_metric
         iterator = inner_item
 
         content {
-          metric_name = inner_item.metric_name
-          namespace   = inner_item.namespace
+          metric_name = inner_item.value.metric_name
+          namespace   = inner_item.value.namespace
         }
       }
     }

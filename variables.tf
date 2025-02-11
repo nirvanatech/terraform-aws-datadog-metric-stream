@@ -27,10 +27,10 @@ variable "datadog_metric_stream_filters" {
 variable "datadog_metric_statistics_configurations" {
   type = list(object({
     additional_statistics = list(string)
-    include_metric = optional(list(object({
+    include_metric = list(object({
       namespace   = string
       metric_name = string
-    })))
+    }))
   }))
   default = []
 }
